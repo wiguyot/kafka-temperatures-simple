@@ -1,14 +1,14 @@
-FROM python:3.11-slim
+# producer/Dockerfile
+FROM python:3.12-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
+# Copie du script producteur
 COPY producer.py .
-COPY wait-for-kafka.sh .
-RUN chmod +x wait-for-kafka.sh
 
-CMD ["./wait-for-kafka.sh"]
+# Installation de la bibliothèque Kafka
+RUN pip install --no-cache-dir kafka-python
+
+# Aucune variable d’environnement fixe ici :
+#   CITY et INTERVAL sont injectées via docker-compose
+CMD ["python", "producer.py"]
