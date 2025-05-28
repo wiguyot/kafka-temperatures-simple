@@ -2,8 +2,13 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# copy your code + the wait script
-COPY consumer.py    ./consumer.py     
+# CHOOSE THE CONSUMMER consumer-auto-commit OR read-then-commit OR async-commit
+COPY consumer-auto-commit.py ./consumer.py     
+# COPY consumer-read-then-commit.py ./consumer.py     
+# COPY consumer-async-commit.py ./consumer.py     
+
+
+
 COPY wait-for-kafka.sh ./wait-for-kafka.sh
 
 # install deps + make wait script executable

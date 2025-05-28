@@ -19,12 +19,13 @@ if not topic:
 
 group_id = os.getenv("GROUP_ID", f"consumer-{city}")
 
-# Initialisation du consommateur Kafka
+# Initialisation du consommateur Kafka avec commit manuel
 consumer = KafkaConsumer(
     topic,
     bootstrap_servers=bootstrap_list,
     group_id=group_id,
     auto_offset_reset="earliest",
+    enable_auto_commit=False,  # désactive le commit automatique
     value_deserializer=lambda m: json.loads(m.decode("utf-8"))
 )
 
@@ -33,3 +34,5 @@ print(f"Consuming from topic `{topic}` on {bootstrap_list} with group `{group_id
 # Boucle de consommation
 for record in consumer:
     print("Consumed ←", record.value)
+    # commit manuel de l’offset immédiatement après traitement
+    consumer.commit()

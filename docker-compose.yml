@@ -89,7 +89,7 @@ services:
     build: ./producer
     environment:
       VILLE: "paris"
-      INTERVAL: "1"
+      INTERVAL: "0.1"
       BOOTSTRAP_SERVERS: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
       KAFKA_HOST: "kafka-1"
       KAFKA_PORT: "9092"

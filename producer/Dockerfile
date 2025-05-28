@@ -2,8 +2,12 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# copy your code + the wait script
-COPY producer.py    ./producer.py      
+# CHOOSE THE PRODUCER round-robin or key-equals-city
+# COPY producer-key-equals-city.py ./producer.py
+COPY producer-round-robin.py ./producer.py        
+
+
+
 COPY wait-for-kafka.sh ./wait-for-kafka.sh
 
 # install deps + make wait script executable
