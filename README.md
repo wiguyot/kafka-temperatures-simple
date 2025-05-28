@@ -1,6 +1,7 @@
 # Tests simples autour de la façon d'écrire et de lire les topics
 
-1 producer et 1 consumer
+1 producer et 1 consumer à choisir
+URL http://localhost:9000 pour accéder au kafdrop après une attente d'une minute 
 
 ```pgsql
 ┌──────────────────────────┐        ┌────────────────────────┐
