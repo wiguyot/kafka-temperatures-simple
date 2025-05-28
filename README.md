@@ -5,14 +5,13 @@ URL http://localhost:9000 pour accéder au kafdrop après une attente d'une minu
 
 ```pgsql
 ┌──────────────────────────┐        ┌────────────────────────┐
-│ 1 × Producers Python     │  --->  │  Kafka topic `weather` │
-│  (Paris, Reims, …)       │        │  4 partitions, RF = 3  │
+│ 1 × Producer Python      │  --->  │  Kafka topic `weather` │
+│                          │        │  4 partitions, RF = 3  │
 └──────────────────────────┘        └─────────┬──────────────┘
                                               │
                  ┌────────────────────────────┴────────────────────────────┐
                  │   3 × Kafka brokers (KRaft, no ZooKeeper)               │
                  │   + internal controller quorum                          │
-                 │   + shared volume for each broker (data)                │
                  └─────────────────────────────────────────────────────────┘
                                               │
                        ┌──────────────────────┴──────────────────────┐
@@ -20,7 +19,7 @@ URL http://localhost:9000 pour accéder au kafdrop après une attente d'une minu
                        └──────────────────────┬──────────────────────┘
                                               │
               ┌───────────────────────────────┴────────────────────────────┐
-              │ 1 × Consumers Python                                       │
+              │ 1 × Consumer  Python                                       │
               └────────────────────────────────────────────────────────────┘
 ```
 
