@@ -1,14 +1,15 @@
-# producer/Dockerfile
 FROM python:3.12-slim
 
 WORKDIR /app
 
-# Copie du script producteur
-COPY producer.py .
+# copy your code + the wait script
+COPY producer.py    ./producer.py      
+COPY wait-for-kafka.sh ./wait-for-kafka.sh
 
-# Installation de la bibliothèque Kafka
-RUN pip install --no-cache-dir kafka-python
+# install deps + make wait script executable
+RUN pip install --no-cache-dir kafka-python \
+ && chmod +x wait-for-kafka.sh
 
-# Aucune variable d’environnement fixe ici :
-#   CITY et INTERVAL sont injectées via docker-compose
-CMD ["python", "producer.py"]
+# first run wait-for-kafka, then hand off to python
+ENTRYPOINT ["./wait-for-kafka.sh"]
+CMD ["python", "./producer.py"]        

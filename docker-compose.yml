@@ -14,6 +14,8 @@ services:
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_DELETE_TOPIC_ENABLE=true
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false 
     healthcheck:
       test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka-1:9092", "--list"]
       interval: 10s
@@ -34,6 +36,8 @@ services:
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-2:9092
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_DELETE_TOPIC_ENABLE=true
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false 
     healthcheck:
       test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka-2:9092", "--list"]
       interval: 10s
@@ -54,6 +58,8 @@ services:
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-3:9092
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_DELETE_TOPIC_ENABLE=true
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false 
     healthcheck:
       test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka-3:9092", "--list"]
       interval: 10s
@@ -82,144 +88,28 @@ services:
   producer-paris:
     build: ./producer
     environment:
-      - VILLE=paris
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
+      VILLE: "paris"
+      INTERVAL: "1"
+      BOOTSTRAP_SERVERS: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+      KAFKA_HOST: "kafka-1"
+      KAFKA_PORT: "9092"
+      TOPIC_NAME: "weather"
 
-  producer-lyon:
-    build: ./producer
-    environment:
-      - VILLE=lyon
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
 
-  producer-marseille:
-    build: ./producer
-    environment:
-      - VILLE=marseille
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
-
-  producer-clermont:
-    build: ./producer
-    environment:
-      - VILLE=clermont
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
-
-  producer-reims:
-    build: ./producer
-    environment:
-      - VILLE=reims
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
 
   # CONSOMMATEURS
   consumer-paris:
     build: ./consumer
     environment:
-      - VILLE=paris
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
+      VILLE: "paris"
+      INTERVAL: "1"
+      BOOTSTRAP_SERVERS: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+      KAFKA_HOST: "kafka-1"
+      KAFKA_PORT: "9092"
+      TOPIC_NAME: "weather"
+      GROUP_ID: "consumer-paris"
 
-  consumer-lyon:
-    build: ./consumer
-    environment:
-      - VILLE=lyon
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
 
-  consumer-marseille:
-    build: ./consumer
-    environment:
-      - VILLE=marseille
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
-
-  consumer-clermont:
-    build: ./consumer
-    environment:
-      - VILLE=clermont
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
-
-  consumer-reims:
-    build: ./consumer
-    environment:
-      - VILLE=reims
-    depends_on:
-      kafka-1:
-        condition: service_healthy
-      kafka-2:
-        condition: service_healthy
-      kafka-3:
-        condition: service_healthy
-      init-topic:
-        condition: service_healthy
-        
   # UI KAFDROP
   kafdrop:
     image: obsidiandynamics/kafdrop
