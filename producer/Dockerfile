@@ -3,8 +3,8 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # CHOOSE THE PRODUCER round-robin or key-equals-city
-# COPY producer-key-equals-city.py ./producer.py
-COPY producer-round-robin.py ./producer.py        
+COPY producer-key-equals-city.py ./producer.py
+#COPY producer-round-robin.py ./producer.py        
 
 
 
