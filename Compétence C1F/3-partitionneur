@@ -1,0 +1,20 @@
+# Partitionneur
+
+Stratégie (DefaultPartitioner, UniformSticky, partitionneur custom) utilisée par le producteur. 	Peut lisser la charge (round-robin) ou regrouper logiquement (par clé métier).
+
+- round-robin : lisse la charge
+- regoupement logique métier : clé métier
+
+
+DefaultPartitioner, partitionneur standard de Kafka (avant Kafka 2.4), responsable d’assigner chaque message produit à une partition du topic.
+- Si la clé (key) du message est définie, il utilise un hash de la clé (modulo le nombre de partitions du topic) pour garantir que tous les messages avec la même clé vont dans la même partition.
+- Si la clé est nulle, le partitionneur sélectionne une partition de façon cyclique/round-robin (en tournant sur toutes les partitions disponibles).
+
+UniformStickyPartitioner, Introduit par défaut depuis Kafka 2.4+ (remplace DefaultPartitioner comme partitionneur par défaut dans le client Java Kafka).
+- Si une clé est présente
+  - Comportement identique à l'ancien DefaultPartitioner
+- Si aucune clé n'est fournie =>  Sticky, mais pas 100% aléatoire à chaque message :
+  - Kafka choisit une partition "sticky" temporaire pour le producteur.
+  - Tous les messages sans clé sont envoyés dans cette partition sticky tant que le batch n’est pas plein (ou tant qu’il n’y a pas de flush forcé).
+  - Quand le batch est envoyé (plein, flush, ou timeout), Kafka choisit une nouvelle partition sticky, au hasard parmi les partitions disponibles, pour le prochain batch.
+=> c'est donc une partition par batch mais pas par message.
