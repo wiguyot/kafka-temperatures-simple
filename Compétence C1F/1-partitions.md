@@ -1,26 +1,26 @@
 # Partitions
-Partition 	Shard physique d’un topic, numéroté 0…N-1, stocké comme un log append-only. 	Débit linéaire : plus de partitions ⇒ plus de parallelisme producteur/consommateur.
+Partition => Shard physique d’un topic, numérotée 0…N-1, stockée comme un log append-only. 	Débit linéaire : plus de partitions => plus de parallelisme producteur/consommateur.
 
 ## Shard physique d'un topic
 
-shard : portion/partie des données du topic
+**shard** : portion/partie des données du topic
 - Chaque topic est divisé en N partitions (shards), numérotées 0…N-1, ce n'est pas un fichier unique.
-- Chacune de ces partitions reçoit un sous-ensemble des messages (par hashing ou clé).
+- Chacune de ces partitions reçoit un sous-ensemble des messages.
 - C'est l’unité de parallélisme, d’ordre local, et de distribution du topic.
 - Un shard est une « partie physique », un fragment réel de données.
 
 
-à ne pas confondre avec le réplica : 
+**à ne pas confondre avec le réplica** : 
 - C’est une copie exacte d’une partition, pour la redondance et la tolérance aux pannes.
-- Chaque partition (donc chaque shard) peut avoir plusieurs réplicas : un leader + des followers.
+- Chaque partition peut avoir plusieurs réplicas : un leader + des followers.
 - Tous les réplicas stockent les mêmes données pour une partition donnée, sur différents brokers.
 
 
-numéroté 0…N-1
+numérotée 0…N-1
 - Chaque partition d’un topic reçoit un numéro unique qui commence à 0 et va jusqu’à N-1 (N étant le nombre total de partitions pour ce topic).
 - Exemple : si un topic a 4 partitions, elles sont numérotées 0, 1, 2, 3.
 
-stocké comme un log append-only
+stockée comme un log append-only
 - Chacune de ces partitions est stockée comme un fichier journal (log) sur disque :
   - append-only veut dire : on ajoute toujours à la fin, on ne modifie ni n’efface le début du fichier.
   - Les nouveaux messages sont simplement append (ajoutés) à la suite du dernier, dans l’ordre d’arrivée.
@@ -54,8 +54,10 @@ kafka-topics.sh --create --topic test-4p --partitions 4 --replication-factor 1 -
 ### Script producteur
 
 - Un script envoie 100 000 messages sur chacun des topics, le plus vite possible 
-  - clé aléatoire 
+  - clé fixée ou aléatoire 
   - round-robin (absence de clé)
+- S'inspirer d'un programme python déjà précédement utilisé.
+
 
 ### Scripts consommateur
 
