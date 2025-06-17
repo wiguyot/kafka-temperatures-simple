@@ -1,39 +1,21 @@
-# Tests simples autour de la façon d'écrire et de lire les topics
+# compétences abordées dans ce dépot kafka-temperatures-simple
 
-1 producer et 1 consumer à choisir
-```URL http://localhost:9000 pour accéder au kafdrop après une attente d'une minute nécessaire pour que tous les éléments de l'applications soient prêts.```
+A la base ce dépot montre un fonctionne simple d'un producteur qui écrit dans un cluster Kafka répliqué 3 fois. Il va servir de base d'apprentissage et de visualisation pour les compétences C1D et C1F. Si nécessaire dans les répertoires des compétences on peut avoir des docker compose complémentaires.
 
-```pgsql
-┌──────────────────────────┐        ┌────────────────────────┐
-│ 1 × Producer Python      │  --->  │  Kafka topic `weather` │
-│                          │        │  4 partitions, RF = 3  │
-└──────────────────────────┘        └─────────┬──────────────┘
-                                              │
-                 ┌────────────────────────────┴────────────────────────────┐
-                 │   3 × Kafka brokers (KRaft, no ZooKeeper)               │
-                 │   + internal controller quorum                          │
-                 └─────────────────────────────────────────────────────────┘
-                                              │
-                       ┌──────────────────────┴──────────────────────┐
-                       │         Kafdrop (UI : localhost:9000)       │
-                       └──────────────────────┬──────────────────────┘
-                                              │
-              ┌───────────────────────────────┴────────────────────────────┐
-              │ 1 × Consumer  Python                                       │
-              └────────────────────────────────────────────────────────────┘
-```
+Ce dépot montre : 
 
-## Producer
+README-docker-compose.md : un prototype de cluster fonctionnel qui montre quelques éléments basiques autour de Kafka. On y trouvera la dynamique entre un producteur et un consommateur.
 
-On a le choix, dans ./producer/Dockerfile du producteur qu'on va utiliser. 
+C1D : 
+- fonctionnement général des leaders/followers
+- observer les latences au moyen de l'outil fourni par Apache Kafka
+- la relation entre durabilité et rétention
+- diagnostiquer les problèmes problèmes liés à l'ISR
+- un petit projet ou TP dans Compétence C1D/activités.md
 
-  - producer-round-robin.py qui écrit dans le topic sans se préoccuper de la répartition des données dans les partitions.
-  - producer-key-equals-city.py qui écrit en utilisant comme clé de partition la valeur de "city".
+C1C : sémantique de traitement des messages
 
-## Consumer
-
-On a le choix dans ./consumer/Dockerfile du consommateur qu'on va utiliser
-
-- consumer-auto-comit.py qui utilise l'autocommit, c'est à dire autocommit toutes les 5 secondes réglage par défaut.
-- consumer-read-then-commit.py désactive l'autocommit et fait un commit à chaque lecture du topic.
-- consumer-async-commit.py désactive l'autocommit et fait un commit asynchrone afin de ne pas surcharger les échanges mais avec les risques inhérents à une défaillance du consommateur qui n'aurait pas validé ses lectures.
+C1F : 
+- approfondir les partitions et les clés de partitions
+- les différents types de partionneurs
+- **Un projet plus ambitieux (10-15 heures ?) dans Compétence C1F**

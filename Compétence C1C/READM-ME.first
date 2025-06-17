@@ -1,0 +1,8 @@
+# sémantiques d'écriture Kafka
+
+Les fichiers MarkDown du répertoire décrive les sémantiques d'écritures Kafka. 
+- At least once => on fait confiance à l'ISR pour la concervation du message et on commit le messsage après traitement.
+- At most once => chaque message est consommé au plus une fois, on commit le message avant traitement.
+- Exactly Once => le message sera délivré dans le cadre d'une transaction unique et il est consommé dans le cadre d'une autre transaction :  
+    - en java 
+    - en python en utilisant confluent_kafka 
