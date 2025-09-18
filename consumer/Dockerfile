@@ -3,7 +3,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # CHOOSE THE CONSUMMER consumer-auto-commit OR read-then-commit OR async-commit
-COPY consumer-auto-commit.py ./consumer.py     
+COPY consumer-read-then-commit.py ./consumer.py     
 # COPY consumer-read-then-commit.py ./consumer.py     
 # COPY consumer-async-commit.py ./consumer.py     
 
